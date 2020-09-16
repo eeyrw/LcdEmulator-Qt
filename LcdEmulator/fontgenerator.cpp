@@ -147,20 +147,20 @@ QPixmap FontGenerator::genSingleCustomFontBitmap(uint8_t* raw, double unitWidth,
                                             * mPixelsPerCol + mPixelSpaceWeight * (mPixelsPerCol - 1)));
 
     QPixmap fontBitmap = QPixmap(bitmapWidth, bitmapHeight);
-
+    fontBitmap.fill(mLcdPanelColor);
     QPainter painter(&fontBitmap);
 
     double charPixelWidth = mUnitWidth * mPixelWeight;
     double charPixelHeight = mUnitHeight * mPixelWeight;
 
     //设置画刷
+
     QBrush brush;
-    brush.setColor(mLcdPanelColor);
     brush.setStyle(Qt::SolidPattern);
+    //painter.setRenderHint(QPainter::Antialiasing);
 
     painter.setBrush(brush);
-
-    painter.drawRect(fontBitmap.rect());
+    painter.setPen(Qt::NoPen);
 
     for (int y = 0; y < mPixelsPerCol; ++y) {
         for (int x = 0; x < mPixelsPerRow; ++x) {
@@ -175,9 +175,11 @@ QPixmap FontGenerator::genSingleCustomFontBitmap(uint8_t* raw, double unitWidth,
             QRectF pixelRect = QRectF(pixelRectLeft, pixelRectTop,
                                       pixelRectRight, pixelRectBottom);
             if ((raw[y] & (1 << x)) != 0)
-                brush.setColor(mPositivePixelColor);
+            {     brush.setColor(mPositivePixelColor);
+                painter.setBrush(brush);}
             else
-                brush.setColor(mNegativePixelColor);
+            {  brush.setColor(mNegativePixelColor);
+                painter.setBrush(brush);}
             painter.drawRect(pixelRect);
 
         }
@@ -200,13 +202,13 @@ QPixmap FontGenerator::genSingleFontBitmap(int fontIndex, double unitWidth, doub
     double charPixelHeight = mUnitHeight * mPixelWeight;
 
     //设置画刷
+
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);
     //painter.setRenderHint(QPainter::Antialiasing);
 
     painter.setBrush(brush);
     painter.setPen(Qt::NoPen);
-    // painter.drawRect(fontBitmap.rect());
 
     for (int y = 0; y < mPixelsPerCol; ++y) {
         for (int x = 0; x < mPixelsPerRow; ++x) {

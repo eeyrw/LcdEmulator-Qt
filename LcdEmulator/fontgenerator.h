@@ -36,7 +36,7 @@ private:
 
     uint8_t* mCustomFontRawData;
 
-    double mPixelSpaceWeight = 2;
+    double mPixelSpaceWeight = 1.3;
     double mPixelWeight = 5;
     double mCharSpaceWeight = 5;
     double mMarginWeight = 12;
@@ -49,8 +49,8 @@ private:
     QPoint mColRowSize;
 
     QColor mPositivePixelColor=Qt::white;
-    QColor mNegativePixelColor=Qt::darkBlue;
-    QColor mLcdPanelColor=Qt::red;
+    QColor mNegativePixelColor=Qt::red;
+    QColor mLcdPanelColor=Qt::black;
 };
 
 #endif // FONTGENERATOR_H
