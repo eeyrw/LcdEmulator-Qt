@@ -49,8 +49,8 @@ private:
     QPoint mColRowSize;
 
     QColor mPositivePixelColor = Qt::white;
-    QColor mNegativePixelColor = Qt::red;
-    QColor mLcdPanelColor = Qt::black;
+    QColor mNegativePixelColor = QColor("#009999");
+    QColor mLcdPanelColor = QColor("#006666");
 };
 
 #endif // FONTGENERATOR_H

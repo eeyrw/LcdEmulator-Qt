@@ -26,7 +26,8 @@ CharLcmView::CharLcmView(QWidget *parent) : QWidget(parent)
         mLcmChars[i] = ' '; // 空格字符
     }
 
-    const char *mTextCStyle = mText.toStdString().c_str();
+    const std::string& stdS = mText.toStdString();
+    const char *mTextCStyle = stdS.c_str();
 
     memcpy(mLcmChars, mTextCStyle, strlen(mTextCStyle) <= mRowNum * mColNum ? strlen(mTextCStyle) : mRowNum * mColNum);
 
@@ -182,10 +183,11 @@ void CharLcmView::paintEvent(QPaintEvent *event)
     brush.setStyle(Qt::SolidPattern);
     //painter.setRenderHint(QPainter::Antialiasing);
     brush.setColor(mLcdPanelColor);
+   brush.setStyle(Qt::SolidPattern);
     painter.setBrush(brush);
     painter.setPen(Qt::NoPen);
 
-    painter.fillRect(rect, brush);
+    painter.fillRect(rect,brush);
     int dy = 0;
     QPointF postion = QPointF();
 
@@ -194,7 +196,7 @@ void CharLcmView::paintEvent(QPaintEvent *event)
         for (int x = 0; x < mColNum; x++)
         {
             mFontGen.getActualCursor(x, y, &postion);                 // y*mColNum+x+32
-            painter.drawPixmap(postion, mFontGen.getCharBitmap('A')); //mLcmChars[dy + x]));
+            painter.drawPixmap(postion, mFontGen.getCharBitmap(mLcmChars[dy + x]));
         }
         dy += mColNum;
     }

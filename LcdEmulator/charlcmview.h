@@ -10,9 +10,9 @@ class CharLcmView : public QWidget
     Q_OBJECT
 private:
     // Color
-    QColor mNegativePixelColor;
-    QColor mPositivePixelColor;
-    QColor mLcdPanelColor;
+    QColor mPositivePixelColor = Qt::white;
+    QColor mNegativePixelColor = QColor("#009999");
+    QColor mLcdPanelColor = QColor("#006666");
 
     // SurfaceView
     int mSurfaceHeight;
