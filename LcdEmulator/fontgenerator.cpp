@@ -298,3 +298,13 @@ QPixmap FontGenerator::getCharBitmap(char charNum)
 
     return mFontBitmapMain[charNum];
 }
+
+FontGenerator::~FontGenerator()
+{
+    //if(mFontBitmapMain!=NULL)
+    //    delete mFontBitmapMain;
+    //if(mFontBitmapCustom!=NULL)
+   // delete mFontBitmapCustom;
+   // if(mCustomFontRawData!=NULL)
+   // delete mCustomFontRawData;
+}

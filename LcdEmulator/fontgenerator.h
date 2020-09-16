@@ -11,6 +11,7 @@ class FontGenerator
 {
 public:
     FontGenerator();
+    ~FontGenerator();
     FontGenerator(QPoint colRowSize, QPoint areaSize, uint8_t *customFontRawData);
     QPixmap genSingleCustomFontBitmap(uint8_t *raw, double unitWidth, double unitHeight);
 
