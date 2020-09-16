@@ -9,24 +9,56 @@ class CharLcmView : public QWidget
 {
     Q_OBJECT
 private:
-    QColor mColorBack=Qt::white;  //背景色
-    QColor mColorBorder=Qt::black;//电池边框颜色
-    QColor mColorPower=Qt::green; //电量柱颜色
-    QColor mColorWarning=Qt::red; //电量短缺时的颜色
-    int mPowerLevel=60;           //当前电量（0-100）
-    int mWarnLevel=20;            //电量低警示阀值
+    // Color
+    QColor mNegativePixelColor;
+    QColor mPositivePixelColor;
+    QColor mLcdPanelColor;
+
+    // SurfaceView
+    int mSurfaceHeight;
+    int mSurfaceWidth;
+
+    // Virtual LCM property
+    int mColNum;
+    int mRowNum;
+
+    int mCursorX;
+    int mCursorY;
+
+    char *mLcmChars;
+    uint8_t *mCustomCharsRaw;
+
+    QString mText;
+
+    // Font generation class instance
+    FontGenerator mFontGen;
+
 protected:
-    void paintEvent(QPaintEvent *event)Q_DECL_OVERRIDE; //绘图
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE; //绘图
 public:
     explicit CharLcmView(QWidget *parent = nullptr);
-    void setPowerLevel(int pow); //设置当前电量
-    int powerLevel(); //得到当前电量
-    void setWarnLevel(int warn); //设置电量低阀值
-    int warnLevel(); //得到电量低阀值
-    QSize sizeHint(); //返回组件的缺省大小
+    QColor getNegativePixelColor();
+    void setNegativePixelColor(QColor mNegativePixelColor);
+    QColor getPositivePixelColor();
+    void setPositivePixelColor(QColor mPositivePixelColor);
+    QColor getLcdPanelColor();
+    void setLcdPanelColor(QColor mLcdPanelColor);
+    QString getText();
+    void setText(QString mText);
+    void forceReDraw();
+    void writeStr(QString str);
+    void setCustomFont(int index, uint8_t *rawdata, int len);
+    void clearScreen();
+    void setCursor(int x, int y);
+    void setCursor(QPoint cursor);
+    void getCursor(int *x, int *y);
+    void getCursor(QPoint *cursor);
+    void reGenResoures();
+    void setColRow(int col, int row);
+    void getColRow(int col, int row);
+    void resizeEvent(QResizeEvent *event);
+
 signals:
-    //当电量值改变时发射此信号
-    void powerLevelChanged(int);
 public slots:
 };
 

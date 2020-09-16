@@ -2,113 +2,200 @@
 
 CharLcmView::CharLcmView(QWidget *parent) : QWidget(parent)
 {
+    mText = "TEST";
 
+    // Size
+    mSurfaceHeight = 150;
+    mSurfaceWidth = 400;
+    mCursorX = 0;
+    mCursorY = 0;
+    mColNum = 20;
+    mRowNum = 4;
+
+    //
+    mCustomCharsRaw = new uint8_t[8 * 8];
+
+    for (int i = 0; i < 8 * 8; i++)
+    {
+        mCustomCharsRaw[i] = (char)0x23; // 特殊图样
+    }
+
+    mLcmChars = new char[mRowNum * mColNum];
+    for (int i = 0; i < mRowNum * mColNum; i++)
+    {
+        mLcmChars[i] = ' '; // 空格字符
+    }
+
+    const char *mTextCStyle = mText.toStdString().c_str();
+
+    memcpy(mLcmChars, mTextCStyle, strlen(mTextCStyle) <= mRowNum * mColNum ? strlen(mTextCStyle) : mRowNum * mColNum);
+
+    mFontGen = FontGenerator(QPoint(mColNum, mRowNum), QPoint(mSurfaceWidth, mSurfaceHeight), mCustomCharsRaw);
+
+    forceReDraw();
 }
 
-void CharLcmView::setPowerLevel(int pow)
+QColor CharLcmView::getNegativePixelColor()
 {
-    mPowerLevel=pow;
-    emit powerLevelChanged(pow);
+    return mNegativePixelColor;
+}
+
+void CharLcmView::setNegativePixelColor(QColor mNegativePixelColor)
+{
+    mNegativePixelColor = mNegativePixelColor;
+}
+
+QColor CharLcmView::getPositivePixelColor()
+{
+    return mPositivePixelColor;
+}
+
+void CharLcmView::setPositivePixelColor(QColor mPositivePixelColor)
+{
+    mPositivePixelColor = mPositivePixelColor;
+}
+
+QColor CharLcmView::getLcdPanelColor()
+{
+    return mLcdPanelColor;
+}
+
+void CharLcmView::setLcdPanelColor(QColor mLcdPanelColor)
+{
+    mLcdPanelColor = mLcdPanelColor;
+}
+
+QString CharLcmView::getText()
+{
+    return mText;
+}
+
+void CharLcmView::setText(QString mText)
+{
+    setCursor(0, 0);
+    mText = mText;
+    memcpy(mLcmChars, mText.toStdString().c_str(), strlen(mText.toStdString().c_str()) <= mRowNum * mColNum ? strlen(mText.toStdString().c_str()) : mRowNum * mColNum);
+
+    forceReDraw();
+}
+
+void CharLcmView::forceReDraw()
+{
     repaint();
 }
 
-
-int CharLcmView::powerLevel()
+void CharLcmView::writeStr(QString str)
 {
-    return mPowerLevel;
+
+    QPoint postion = QPoint(mCursorX, mCursorY);
+    memcpy(mLcmChars + mCursorX + mCursorY * mColNum, str.toStdString().c_str(), strlen(str.toStdString().c_str()) + mCursorX + mCursorY * mColNum <= mRowNum * mColNum ? strlen(str.toStdString().c_str()) : mRowNum * mColNum);
+
+    mCursorX += (mCursorX + mCursorY * mColNum + strlen(str.toStdString().c_str())) % mColNum;
+    forceReDraw();
 }
 
-
-void CharLcmView::setWarnLevel(int warn)
+void CharLcmView::setCustomFont(int index, uint8_t *rawdata, int len)
 {
-    mWarnLevel=warn;
-    repaint();
+
+    memcpy(mCustomCharsRaw + index * 8, rawdata, len);
+    reGenResoures();
+    forceReDraw();
 }
 
-
-QSize CharLcmView::sizeHint()
+void CharLcmView::clearScreen()
 {
-    int H=this->height();
-    int W=H*12/5;
-    QSize size(W,H);
-    return size;
+
+    for (int i = 0; i < mRowNum * mColNum; i++)
+    {
+        mLcmChars[i] = ' '; // 空格字符
+    }
+    mCursorX = 0;
+    mCursorY = 0;
+    forceReDraw();
 }
 
-
-int CharLcmView::warnLevel()
+void CharLcmView::setCursor(int x, int y)
 {
-    return mWarnLevel;
+    mCursorX = x;
+    mCursorY = y;
+}
+
+void CharLcmView::setCursor(QPoint cursor)
+{
+    mCursorX = cursor.x();
+    mCursorY = cursor.y();
+}
+
+void CharLcmView::getCursor(int *x, int *y)
+{
+    (*x) = mCursorX;
+    (*y) = mCursorY;
+}
+
+void CharLcmView::getCursor(QPoint *cursor)
+{
+    cursor->setX(mCursorX);
+    cursor->setY(mCursorY);
+}
+
+void CharLcmView::reGenResoures()
+{
+    mFontGen = FontGenerator(QPoint(mColNum, mRowNum), QPoint(mSurfaceWidth, mSurfaceHeight), mCustomCharsRaw);
+}
+
+void CharLcmView::setColRow(int col, int row)
+{
+    mColNum = col;
+    mRowNum = row;
+    reGenResoures();
+    forceReDraw();
+}
+
+void CharLcmView::getColRow(int col, int row)
+{
+    col = mColNum;
+    row = mRowNum;
+}
+
+void CharLcmView::resizeEvent(QResizeEvent *event)
+{
+    mSurfaceHeight = height();
+    mSurfaceWidth = width();
+    reGenResoures();
+    forceReDraw();
 }
 
 void CharLcmView::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     QPainter painter(this);
-    uint8_t tt[64];
 
-//    //设置QPainter的绘图区
-    QRect rect(0,0,width(),height());
+    //    //设置QPainter的绘图区
+    QRect rect(0, 0, width(), height());
     painter.setViewport(rect);
     painter.setRenderHint(QPainter::Antialiasing);
-    FontGenerator fg = FontGenerator(QPoint(20,4),QPoint(1640,600),tt);
-    painter.drawPixmap(0,0,fg.getCharBitmap(78));
 
+    mSurfaceHeight = height();
+    mSurfaceWidth = width();
 
-//    painter.setWindow(0,0,120,50);
-//    painter.setRenderHint(QPainter::Antialiasing);
-//    painter.setRenderHint(QPainter::TextAntialiasing);
+    QBrush brush;
+    brush.setStyle(Qt::SolidPattern);
+    //painter.setRenderHint(QPainter::Antialiasing);
+    brush.setColor(mLcdPanelColor);
+    painter.setBrush(brush);
+    painter.setPen(Qt::NoPen);
 
-//    //设置画笔
-//    QPen pen;
-//    pen.setWidth(2);
-//    pen.setColor(mColorBorder);
-//    pen.setStyle(Qt::SolidLine);
-//    pen.setCapStyle(Qt::FlatCap);
-//    pen.setJoinStyle(Qt::BevelJoin);
-//    //设置画刷
-//    QBrush brush;
-//    brush.setColor(mColorBack);
-//    brush.setStyle(Qt::SolidPattern);
+    painter.fillRect(rect, brush);
+    int dy = 0;
+    QPointF postion = QPointF();
 
-//    painter.setPen(pen);
-//    painter.setBrush(brush);
-
-//    //改变rect的区域，绘制电池边框
-//    rect.setRect(1,1,109,48);
-//    painter.drawRect(rect);
-
-//    //改变画刷颜色，改变rect的区域，绘制电池的正极头
-//    brush.setColor(mColorBorder);
-//    painter.setBrush(brush);
-//    rect.setRect(110,15,10,20);
-//    painter.drawRect(rect);
-
-//    //画电池柱
-//    if(mPowerLevel>mWarnLevel) //正常颜色电量柱
-//    {
-//        brush.setColor(mColorPower);
-//        pen.setColor(mColorPower);
-//    }
-//    else//电量低时电量柱
-//    {
-//        brush.setColor(mColorWarning);
-//        pen.setColor(mColorWarning);
-//    }
-//    painter.setBrush(brush);
-//    painter.setPen(pen);
-//    if(mPowerLevel>0)//如果当前有电量，绘制电量柱
-//    {
-//        rect.setRect(5,5,mPowerLevel,40);
-//        painter.drawRect(rect);
-//    }
-
-//    //绘制电量百分比文字
-//    QFontMetrics textSize(this->font());
-//    QString powerStr=QString::asprintf("%d%%",mPowerLevel);
-//    QRect textRect=textSize.boundingRect(powerStr); //得到字符串的rect
-//    painter.setFont(this->font());
-//    pen.setColor(mColorBorder);
-//    painter.setPen(pen);
-//    painter.drawText(55-textRect.width()/2,23+textRect.height()/2,powerStr);;
-
+    for (int y = 0; y < mRowNum; y++)
+    {
+        for (int x = 0; x < mColNum; x++)
+        {
+            mFontGen.getActualCursor(x, y, &postion);                 // y*mColNum+x+32
+            painter.drawPixmap(postion, mFontGen.getCharBitmap('A')); //mLcmChars[dy + x]));
+        }
+        dy += mColNum;
+    }
 }
