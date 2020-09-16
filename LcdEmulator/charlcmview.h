@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPainter>
+#include <fontgenerator.h>
 
 class CharLcmView : public QWidget
 {

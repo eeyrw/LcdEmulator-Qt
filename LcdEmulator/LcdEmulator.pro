@@ -26,11 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-        charlcmview.cpp
+        charlcmview.cpp \
+    fontgenerator.cpp
 
 HEADERS += \
         mainwindow.h \
-        charlcmview.h
+        charlcmview.h \
+    fontgenerator.h
 
 FORMS += \
         mainwindow.ui
