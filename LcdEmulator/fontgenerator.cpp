@@ -143,7 +143,7 @@ QPixmap FontGenerator::genSingleCustomFontBitmap(uint8_t *raw, double unitWidth,
 
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);
-    //painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing);
 
     painter.setBrush(brush);
     painter.setPen(Qt::NoPen);
@@ -192,7 +192,7 @@ QPixmap FontGenerator::genSingleFontBitmap(int fontIndex, double unitWidth, doub
 
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);
-    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing);
 
     painter.setBrush(brush);
     painter.setPen(Qt::NoPen);
