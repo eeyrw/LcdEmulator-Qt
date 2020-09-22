@@ -13,7 +13,7 @@ CharLcmView::CharLcmView(QWidget *parent) : QWidget(parent)
     mRowNum = 4;
 
     //
-    mCustomCharsRaw = new uint8_t[8 * 8];
+    mCustomCharsRaw = QVector<uint8_t>(8 * 8);
 
     for (int i = 0; i < 8 * 8; i++)
     {
@@ -95,10 +95,10 @@ void CharLcmView::writeStr(QString str)
     forceReDraw();
 }
 
-void CharLcmView::setCustomFont(int index, uint8_t *rawdata, int len)
+void CharLcmView::setCustomFont(int index, QVector<uint8_t> rawdata, int len)
 {
 
-    memcpy(mCustomCharsRaw + index * 8, rawdata, len);
+    memcpy(mCustomCharsRaw.data() + index * 8, rawdata.data(), len);
     reGenResoures();
     forceReDraw();
 }

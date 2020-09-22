@@ -6,18 +6,19 @@
 #include <QPoint>
 #include <QPixmap>
 #include <QPainter>
+#include <QVector>
 
 class FontGenerator
 {
 public:
     FontGenerator();
     ~FontGenerator();
-    FontGenerator(QPoint colRowSize, QPoint areaSize, uint8_t *customFontRawData);
-    QPixmap genSingleCustomFontBitmap(uint8_t *raw, double unitWidth, double unitHeight);
+    FontGenerator(QPoint colRowSize, QPoint areaSize, QVector<uint8_t> customFontRawData);
+    QPixmap genSingleCustomFontBitmap(QVector<uint8_t> raw, double unitWidth, double unitHeight);
 
     QPixmap genSingleFontBitmap(int fontIndex, double unitWidth, double unitHeight);
     void genMainFontBitmap(double unitWidth, double unitHeight);
-    void genCustomFontBitmap(uint8_t *allRawData, double unitWidth, double unitHeight);
+    void genCustomFontBitmap(QVector<uint8_t> allRawData, double unitWidth, double unitHeight);
     void setColRowSize(QPoint size);
     QPoint getColRowSize();
     void getActualCursor(QPoint cursor, QPointF *actualCursor);
@@ -32,10 +33,10 @@ private:
     double mCharWidthOffset;
     double mCharHeightOffset;
 
-    QPixmap *mFontBitmapMain;
-    QPixmap *mFontBitmapCustom;
+    QVector<QPixmap> mFontBitmapMain;
+    QVector<QPixmap> mFontBitmapCustom;
 
-    uint8_t *mCustomFontRawData;
+    QVector<uint8_t> mCustomFontRawData;
 
     double mPixelSpaceWeight = 1.3;
     double mPixelWeight = 5;

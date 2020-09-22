@@ -103,7 +103,7 @@ FontGenerator::FontGenerator() // 默认构造函数
 {
     //这里面做一些变量内存分配的事..
 }
-FontGenerator::FontGenerator(QPoint colRowSize, QPoint areaSize, uint8_t *customFontRawData)
+FontGenerator::FontGenerator(QPoint colRowSize, QPoint areaSize, QVector<uint8_t> customFontRawData)
 {
 
     mColRowSize = colRowSize;
@@ -126,7 +126,7 @@ FontGenerator::FontGenerator(QPoint colRowSize, QPoint areaSize, uint8_t *custom
     mCharHeightOffset = mUnitHeight * (mPixelWeight * mPixelsPerCol + mPixelSpaceWeight * (mPixelsPerCol - 1) + mCharSpaceWeight * 2);
 }
 
-QPixmap FontGenerator::genSingleCustomFontBitmap(uint8_t *raw, double unitWidth, double unitHeight)
+QPixmap FontGenerator::genSingleCustomFontBitmap(QVector<uint8_t> raw, double unitWidth, double unitHeight)
 {
 
     int bitmapWidth = (int)(unitWidth * (mPixelWeight * mPixelsPerRow + mPixelSpaceWeight * (mPixelsPerRow - 1)));
@@ -229,7 +229,7 @@ void FontGenerator::genMainFontBitmap(double unitWidth, double unitHeight)
 
     int fontNum = sizeof(mRawFontsData) / mBytesPerFont;
 
-    mFontBitmapMain = new QPixmap[fontNum];
+    mFontBitmapMain = QVector<QPixmap>(fontNum);
 
     for (int fontIndex = 0; fontIndex < fontNum; ++fontIndex)
     {
@@ -239,18 +239,18 @@ void FontGenerator::genMainFontBitmap(double unitWidth, double unitHeight)
     //Log.i(TAG, "Custom font generated.");
 }
 
-void FontGenerator::genCustomFontBitmap(uint8_t *allRawData, double unitWidth, double unitHeight)
+void FontGenerator::genCustomFontBitmap(QVector<uint8_t> allRawData, double unitWidth, double unitHeight)
 {
 
     int fontNum = 8;
 
-    mFontBitmapCustom = new QPixmap[fontNum];
+    mFontBitmapCustom = QVector<QPixmap>(fontNum);
 
-    uint8_t *temp = new uint8_t[8];
+    QVector<uint8_t> temp = QVector<uint8_t>(8);
 
     for (int fontIndex = 0; fontIndex < fontNum; ++fontIndex)
     {
-        memcpy(temp, allRawData + fontIndex * 8, 8);
+        memcpy(temp.data(), allRawData.data() + fontIndex * 8, 8);
         mFontBitmapCustom[fontIndex] = genSingleCustomFontBitmap(temp,
                                                                  unitWidth, unitHeight);
     }
@@ -301,8 +301,15 @@ QPixmap FontGenerator::getCharBitmap(char charNum)
 
 FontGenerator::~FontGenerator()
 {
-    //if(mFontBitmapMain!=NULL)
-    //    delete mFontBitmapMain;
+    for(QPixmap &bitmap:mFontBitmapMain)
+    {
+        bitmap.~QPixmap();
+    }
+    for(QPixmap &bitmap:mFontBitmapCustom)
+    {
+        bitmap.~QPixmap();
+    }
+
     //if(mFontBitmapCustom!=NULL)
    // delete mFontBitmapCustom;
    // if(mCustomFontRawData!=NULL)

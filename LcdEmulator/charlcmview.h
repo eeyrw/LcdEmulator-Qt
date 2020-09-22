@@ -26,7 +26,7 @@ private:
     int mCursorY;
 
     char *mLcmChars;
-    uint8_t *mCustomCharsRaw;
+    QVector<uint8_t> mCustomCharsRaw;
 
     QString mText;
 
@@ -47,7 +47,7 @@ public:
     void setText(QString mText);
     void forceReDraw();
     void writeStr(QString str);
-    void setCustomFont(int index, uint8_t *rawdata, int len);
+    void setCustomFont(int index, QVector<uint8_t> rawdata, int len);
     void clearScreen();
     void setCursor(int x, int y);
     void setCursor(QPoint cursor);
