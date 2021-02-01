@@ -301,17 +301,17 @@ QPixmap FontGenerator::getCharBitmap(char charNum)
 
 FontGenerator::~FontGenerator()
 {
-    for(QPixmap &bitmap:mFontBitmapMain)
+    for (QPixmap &bitmap : mFontBitmapMain)
     {
         bitmap.~QPixmap();
     }
-    for(QPixmap &bitmap:mFontBitmapCustom)
+    for (QPixmap &bitmap : mFontBitmapCustom)
     {
         bitmap.~QPixmap();
     }
 
     //if(mFontBitmapCustom!=NULL)
-   // delete mFontBitmapCustom;
-   // if(mCustomFontRawData!=NULL)
-   // delete mCustomFontRawData;
+    // delete mFontBitmapCustom;
+    // if(mCustomFontRawData!=NULL)
+    // delete mCustomFontRawData;
 }
