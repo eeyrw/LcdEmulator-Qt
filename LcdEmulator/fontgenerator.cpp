@@ -107,17 +107,21 @@ FontGenerator::FontGenerator(QPoint colRowSize, QPoint areaSize, QVector<uint8_t
 {
 
     mColRowSize = colRowSize;
+    mSurfaceWidth = areaSize.x();
+    mSurfaceHeight = areaSize.y();
+    mCustomFontRawData = customFontRawData;
+    // reGenFont();
+}
+
+void FontGenerator::reGenFont()
+{
     double colNum = mColRowSize.x();
     double rowNum = mColRowSize.y();
 
-    double surfaceWidth = areaSize.x();
-    double surfaceHeight = areaSize.y();
     // mMarginWeight*2+colNum*(mPixelWeight*mPixelsPerRow+mPixelSpaceWeight*(mPixelsPerRow-1))+(colNum-1)*mCharSpaceWeight
-    mUnitWidth = surfaceWidth / (mMarginWeight * 2 + colNum * (mPixelWeight * mPixelsPerRow + mPixelSpaceWeight * (mPixelsPerRow - 1)) + (colNum - 1) * mCharSpaceWeight);
+    mUnitWidth = mSurfaceWidth / (mMarginWeight * 2 + colNum * (mPixelWeight * mPixelsPerRow + mPixelSpaceWeight * (mPixelsPerRow - 1)) + (colNum - 1) * mCharSpaceWeight);
     // mMarginWeight*2+rowNum*(mPixelWeight*mPixelsPerCol+mPixelSpaceWeight*(mPixelsPerCol-1))+(rowNum-1)*2*mCharSpaceWeight
-    mUnitHeight = surfaceHeight / (mMarginWeight * 2 + rowNum * (mPixelWeight * mPixelsPerCol + mPixelSpaceWeight * (mPixelsPerCol - 1)) + (rowNum - 1) * 2 * mCharSpaceWeight);
-
-    mCustomFontRawData = customFontRawData;
+    mUnitHeight = mSurfaceHeight / (mMarginWeight * 2 + rowNum * (mPixelWeight * mPixelsPerCol + mPixelSpaceWeight * (mPixelsPerCol - 1)) + (rowNum - 1) * 2 * mCharSpaceWeight);
 
     genMainFontBitmap(mUnitWidth, mUnitHeight);
     genCustomFontBitmap(mCustomFontRawData, mUnitWidth, mUnitHeight);
@@ -295,6 +299,36 @@ QPixmap FontGenerator::getCharBitmap(char charNum)
     }
 
     return mFontBitmapMain[charNum];
+}
+
+QColor FontGenerator::getNegativePixelColor()
+{
+    return mNegativePixelColor;
+}
+
+void FontGenerator::setNegativePixelColor(QColor negativePixelColor)
+{
+    mNegativePixelColor = negativePixelColor;
+}
+
+QColor FontGenerator::getPositivePixelColor()
+{
+    return mPositivePixelColor;
+}
+
+void FontGenerator::setPositivePixelColor(QColor positivePixelColor)
+{
+    mPositivePixelColor = positivePixelColor;
+}
+
+QColor FontGenerator::getLcdPanelColor()
+{
+    return mLcdPanelColor;
+}
+
+void FontGenerator::setLcdPanelColor(QColor lcdPanelColor)
+{
+    mLcdPanelColor = lcdPanelColor;
 }
 
 FontGenerator::~FontGenerator()

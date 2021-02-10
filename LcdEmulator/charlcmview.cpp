@@ -41,9 +41,11 @@ QColor CharLcmView::getNegativePixelColor()
     return mNegativePixelColor;
 }
 
-void CharLcmView::setNegativePixelColor(QColor mNegativePixelColor)
+void CharLcmView::setNegativePixelColor(QColor negativePixelColor)
 {
-    mNegativePixelColor = mNegativePixelColor;
+    mNegativePixelColor = negativePixelColor;
+    reGenResoures();
+    forceReDraw();
 }
 
 QColor CharLcmView::getPositivePixelColor()
@@ -51,9 +53,11 @@ QColor CharLcmView::getPositivePixelColor()
     return mPositivePixelColor;
 }
 
-void CharLcmView::setPositivePixelColor(QColor mPositivePixelColor)
+void CharLcmView::setPositivePixelColor(QColor positivePixelColor)
 {
-    mPositivePixelColor = mPositivePixelColor;
+    mPositivePixelColor = positivePixelColor;
+    reGenResoures();
+    forceReDraw();
 }
 
 QColor CharLcmView::getLcdPanelColor()
@@ -61,9 +65,11 @@ QColor CharLcmView::getLcdPanelColor()
     return mLcdPanelColor;
 }
 
-void CharLcmView::setLcdPanelColor(QColor mLcdPanelColor)
+void CharLcmView::setLcdPanelColor(QColor lcdPanelColor)
 {
-    mLcdPanelColor = mLcdPanelColor;
+    mLcdPanelColor = lcdPanelColor;
+    reGenResoures();
+    forceReDraw();
 }
 
 QString CharLcmView::getText()
@@ -71,10 +77,10 @@ QString CharLcmView::getText()
     return mText;
 }
 
-void CharLcmView::setText(QString mText)
+void CharLcmView::setText(QString text)
 {
     setCursor(0, 0);
-    mText = mText;
+    mText = text;
     memcpy(mLcmChars, mText.toStdString().c_str(), strlen(mText.toStdString().c_str()) <= mRowNum * mColNum ? strlen(mText.toStdString().c_str()) : mRowNum * mColNum);
 
     forceReDraw();
@@ -94,7 +100,7 @@ void CharLcmView::writeStr(QString str)
     mCursorX += (mCursorX + mCursorY * mColNum + strlen(str.toStdString().c_str())) % mColNum;
     forceReDraw();
 }
-void CharLcmView::write(const char* data,int len)
+void CharLcmView::write(const char *data, int len)
 {
 
     QPoint postion = QPoint(mCursorX, mCursorY);
@@ -112,7 +118,7 @@ void CharLcmView::setCustomFont(int index, QVector<uint8_t> rawdata, int len)
     forceReDraw();
 }
 
-void CharLcmView::setCustomFont(int index, uint8_t* rawdata, int len)
+void CharLcmView::setCustomFont(int index, uint8_t *rawdata, int len)
 {
 
     memcpy(mCustomCharsRaw.data() + index * 8, rawdata, len);
@@ -159,6 +165,10 @@ void CharLcmView::getCursor(QPoint *cursor)
 void CharLcmView::reGenResoures()
 {
     mFontGen = FontGenerator(QPoint(mColNum, mRowNum), QPoint(mSurfaceWidth, mSurfaceHeight), mCustomCharsRaw);
+    mFontGen.setLcdPanelColor(mLcdPanelColor);
+    mFontGen.setNegativePixelColor(mNegativePixelColor);
+    mFontGen.setPositivePixelColor(mPositivePixelColor);
+    mFontGen.reGenFont();
 }
 
 void CharLcmView::setColRow(int col, int row)

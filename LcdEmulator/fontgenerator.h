@@ -25,6 +25,13 @@ public:
 
     void getActualCursor(int x, int y, QPointF *actualCursor);
     QPixmap getCharBitmap(char charNum);
+    QColor getNegativePixelColor();
+    void setNegativePixelColor(QColor negativePixelColor);
+    QColor getPositivePixelColor();
+    void setPositivePixelColor(QColor positivePixelColor);
+    QColor getLcdPanelColor();
+    void setLcdPanelColor(QColor lcdPanelColor);
+    void reGenFont();
 
 private:
     double mUnitWidth;
@@ -32,6 +39,9 @@ private:
 
     double mCharWidthOffset;
     double mCharHeightOffset;
+
+    double mSurfaceWidth;
+    double mSurfaceHeight;
 
     QVector<QPixmap> mFontBitmapMain;
     QVector<QPixmap> mFontBitmapCustom;

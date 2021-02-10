@@ -14,6 +14,7 @@ public:
     explicit TcpServer(QObject *parent = nullptr);
 
     void StartListen(int nPort);
+
 private:
     QTcpServer *m_piserver;
     QTcpSocket *m_pisocket;
@@ -25,6 +26,5 @@ public slots:
     void readMessage();
     void disConnect();
 };
-
 
 #endif // TCPSERVER_H

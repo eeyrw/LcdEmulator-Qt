@@ -3,8 +3,9 @@
 
 #include <QMainWindow>
 
-namespace Ui {
-class MainWindow;
+namespace Ui
+{
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
@@ -16,9 +17,10 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_clicked();
 
-    void on_horizontalSlider_valueChanged(int value);
+    void on_btnSetBackColor_clicked();
+    void on_btnSetGridColor_clicked();
+    void on_btnSetPixelColor_clicked();
 
 private:
     Ui::MainWindow *ui;

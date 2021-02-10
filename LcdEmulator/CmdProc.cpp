@@ -1,6 +1,5 @@
 #include "CmdProc.h"
 
-
 #define EVENT_FRAME_FLAG 0x776E //ASCII:"wn"
 
 #define CMD_LCD_INIT 0x01
@@ -18,7 +17,8 @@
 
 #define CMD_OFFEST 0x03
 
-typedef enum _EVENT_FRAME_PARSER_STATUS {
+typedef enum _EVENT_FRAME_PARSER_STATUS
+{
     FRAME_PARSER_STATUS_IDLE = 0,
     FRAME_PARSER_STATUS_SOF_LO,
     FRAME_PARSER_STATUS_SOF_HI,
@@ -31,7 +31,7 @@ static EVENT_FRAME_PARSER_STATUS frameParseStatus;
 static uint8_t cmdBuf[256];
 static uint8_t cmdRetBuf[256];
 
-CharLcmView* defaultLcmView;
+CharLcmView *defaultLcmView;
 
 uint8_t *GetCmdDataPtr(uint8_t *buffer)
 {
@@ -86,7 +86,7 @@ int Protocol_Process(unsigned char *Buf)
         //		{
         //			lcd.write(Buf[2 + i]);
         //		}
-        defaultLcmView->write((const char*)&Buf[2],Buf[1]);
+        defaultLcmView->write((const char *)&Buf[2], Buf[1]);
 
         break;
 
@@ -102,21 +102,22 @@ int Protocol_Process(unsigned char *Buf)
         //printf("CMD_LCD_CUSTOMCHAR.\n");
         //lcd.createChar(Buf[1], &Buf[2]);
         uint8_t font[8];
-        memcpy(font,&Buf[2],8);
+        memcpy(font, &Buf[2], 8);
         // Reverse bit
-        for (int i = 0; i < sizeof(font); i++) {
+        for (int i = 0; i < sizeof(font); i++)
+        {
             uint8_t x = font[i];
             uint8_t b = 0;
 
-            for (int bit = 4; bit >= 0; bit--) {
+            for (int bit = 4; bit >= 0; bit--)
+            {
                 if ((x & 1 << bit) != 0)
                     b |= 1 << (4 - bit);
-
             }
             font[i] = b;
         }
 
-        defaultLcmView->setCustomFont(Buf[1], font,8);
+        defaultLcmView->setCustomFont(Buf[1], font, 8);
         break;
 
     case CMD_LCD_WRITECMD:
@@ -165,7 +166,7 @@ bool ParseEventFrameStream(QTcpSocket *client)
     {
         if (client->bytesAvailable())
         {
-            client->read((char*)&streamByte,1);
+            client->read((char *)&streamByte, 1);
             if (streamByte == ((uint8_t)(0xFF & EVENT_FRAME_FLAG)))
             {
                 frameParseStatus = FRAME_PARSER_STATUS_SOF_LO;
@@ -173,12 +174,12 @@ bool ParseEventFrameStream(QTcpSocket *client)
             }
         }
     }
-        break;
+    break;
     case FRAME_PARSER_STATUS_SOF_LO:
     {
         if (client->bytesAvailable())
         {
-            client->read((char*)&streamByte,1);
+            client->read((char *)&streamByte, 1);
             if (streamByte == ((uint8_t)(0xFF & (EVENT_FRAME_FLAG >> 8))))
             {
                 frameParseStatus = FRAME_PARSER_STATUS_SOF_HI;
@@ -186,24 +187,24 @@ bool ParseEventFrameStream(QTcpSocket *client)
             }
         }
     }
-        break;
+    break;
     case FRAME_PARSER_STATUS_SOF_HI:
     {
         if (client->bytesAvailable())
         {
-            client->read((char*)&streamByte,1);
+            client->read((char *)&streamByte, 1);
             cmdLen = streamByte;
             frameParseStatus = FRAME_PARSER_STATUS_RECV_CMD_LEN;
-                processStatus = true;
+            processStatus = true;
         }
     }
-        break;
+    break;
 
     case FRAME_PARSER_STATUS_RECV_CMD_LEN:
     {
         if (client->bytesAvailable() >= cmdLen)
         {
-            client->read((char*)cmdBuf, cmdLen);
+            client->read((char *)cmdBuf, cmdLen);
             int retByteNum = Protocol_Process(cmdBuf);
             if (retByteNum > 0)
             {
@@ -211,15 +212,15 @@ bool ParseEventFrameStream(QTcpSocket *client)
                 cmdRetBuf[1] = (uint8_t)(0xFF & (EVENT_FRAME_FLAG >> 8));
                 cmdRetBuf[2] = retByteNum;
                 retByteNum += 3;
-                client->write((const char*)cmdRetBuf, retByteNum);
+                client->write((const char *)cmdRetBuf, retByteNum);
             }
 
             frameParseStatus = FRAME_PARSER_STATUS_IDLE;
-                processStatus = true;
+            processStatus = true;
             cmdLen = 0;
         }
     }
-        break;
+    break;
 
     default:
         break;

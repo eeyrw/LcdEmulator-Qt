@@ -6,7 +6,7 @@
 #include <cstdio>
 #include "charlcmview.h"
 
-extern CharLcmView* defaultLcmView;
+extern CharLcmView *defaultLcmView;
 extern bool ParseEventFrameStream(QTcpSocket *client);
 extern int Protocol_Process(unsigned char *Buf);
 #endif // CMDPROC_H
