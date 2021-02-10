@@ -3,6 +3,7 @@
 CharLcmView::CharLcmView(QWidget *parent) : QWidget(parent)
 {
     mText = "TEST";
+    mIsFullScreen = false;
 
     // Size
     mSurfaceHeight = 150;
@@ -226,5 +227,21 @@ void CharLcmView::paintEvent(QPaintEvent *event)
             painter.drawPixmap(postion, mFontGen.getCharBitmap(mLcmChars[dy + x]));
         }
         dy += mColNum;
+    }
+}
+
+void CharLcmView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if (!mIsFullScreen)
+    {
+        this->setWindowFlags(Qt::Window);
+        this->showFullScreen();
+        mIsFullScreen = true;
+    }
+    else
+    {
+        this->setWindowFlags(Qt::SubWindow);
+        this->showNormal();
+        mIsFullScreen = false;
     }
 }

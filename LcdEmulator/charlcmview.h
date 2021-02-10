@@ -33,6 +33,8 @@ private:
     // Font generation class instance
     FontGenerator mFontGen;
 
+    bool mIsFullScreen;
+
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE; //绘图
 public:
@@ -59,6 +61,7 @@ public:
     void setColRow(int col, int row);
     void getColRow(int col, int row);
     void resizeEvent(QResizeEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 signals:
 public slots:

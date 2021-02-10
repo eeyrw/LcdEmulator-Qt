@@ -22,6 +22,8 @@ private slots:
     void on_btnSetGridColor_clicked();
     void on_btnSetPixelColor_clicked();
 
+    void on_btnFullScreen_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

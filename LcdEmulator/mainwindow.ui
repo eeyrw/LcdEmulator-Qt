@@ -54,6 +54,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="btnFullScreen">
+        <property name="text">
+         <string>FullScreen</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>

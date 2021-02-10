@@ -91,3 +91,11 @@ void MainWindow::on_btnSetPixelColor_clicked()
         settings.setValue("Color/PositivePixelColor", Color);
     }
 }
+
+void MainWindow::on_btnFullScreen_clicked()
+{
+    ui->charLcmView->setWindowFlags (Qt::Window);
+    ui->charLcmView->showFullScreen();
+}
+
+
