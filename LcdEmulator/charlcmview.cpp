@@ -94,11 +94,28 @@ void CharLcmView::writeStr(QString str)
     mCursorX += (mCursorX + mCursorY * mColNum + strlen(str.toStdString().c_str())) % mColNum;
     forceReDraw();
 }
+void CharLcmView::write(const char* data,int len)
+{
+
+    QPoint postion = QPoint(mCursorX, mCursorY);
+    memcpy(mLcmChars + mCursorX + mCursorY * mColNum, data, len + mCursorX + mCursorY * mColNum <= mRowNum * mColNum ? len : mRowNum * mColNum);
+
+    mCursorX += (mCursorX + mCursorY * mColNum + len) % mColNum;
+    forceReDraw();
+}
 
 void CharLcmView::setCustomFont(int index, QVector<uint8_t> rawdata, int len)
 {
 
     memcpy(mCustomCharsRaw.data() + index * 8, rawdata.data(), len);
+    reGenResoures();
+    forceReDraw();
+}
+
+void CharLcmView::setCustomFont(int index, uint8_t* rawdata, int len)
+{
+
+    memcpy(mCustomCharsRaw.data() + index * 8, rawdata, len);
     reGenResoures();
     forceReDraw();
 }

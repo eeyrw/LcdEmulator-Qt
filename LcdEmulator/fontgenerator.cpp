@@ -155,11 +155,9 @@ QPixmap FontGenerator::genSingleCustomFontBitmap(QVector<uint8_t> raw, double un
 
             float pixelRectLeft = (float)(x * (charPixelWidth + mPixelSpaceWeight * mUnitWidth));
             float pixelRectTop = (float)(y * (charPixelHeight + mPixelSpaceWeight * mUnitHeight));
-            float pixelRectRight = (float)(pixelRectLeft + charPixelWidth);
-            float pixelRectBottom = (float)(pixelRectTop + charPixelHeight);
 
             QRectF pixelRect = QRectF(pixelRectLeft, pixelRectTop,
-                                      pixelRectRight, pixelRectBottom);
+                                      charPixelWidth, charPixelHeight);
             if ((raw[y] & (1 << x)) != 0)
             {
                 brush.setColor(mPositivePixelColor);

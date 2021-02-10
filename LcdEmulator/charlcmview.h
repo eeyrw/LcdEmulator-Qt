@@ -46,8 +46,10 @@ public:
     QString getText();
     void setText(QString mText);
     void forceReDraw();
+    void write(const char* data,int len);
     void writeStr(QString str);
     void setCustomFont(int index, QVector<uint8_t> rawdata, int len);
+    void setCustomFont(int index, uint8_t* rawdata, int len);
     void clearScreen();
     void setCursor(int x, int y);
     void setCursor(QPoint cursor);

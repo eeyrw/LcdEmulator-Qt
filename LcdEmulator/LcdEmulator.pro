@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -24,15 +24,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    CmdProc.cpp \
         main.cpp \
         mainwindow.cpp \
         charlcmview.cpp \
-    fontgenerator.cpp
+    fontgenerator.cpp \
+    tcpserver.cpp
 
 HEADERS += \
+    CmdProc.h \
         mainwindow.h \
         charlcmview.h \
-    fontgenerator.h
+    fontgenerator.h \
+    tcpserver.h
 
 FORMS += \
         mainwindow.ui
