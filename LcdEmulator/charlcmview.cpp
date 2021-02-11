@@ -94,8 +94,6 @@ void CharLcmView::forceReDraw()
 
 void CharLcmView::writeStr(QString str)
 {
-
-    QPoint postion = QPoint(mCursorX, mCursorY);
     memcpy(mLcmChars + mCursorX + mCursorY * mColNum, str.toStdString().c_str(), strlen(str.toStdString().c_str()) + mCursorX + mCursorY * mColNum <= mRowNum * mColNum ? strlen(str.toStdString().c_str()) : mRowNum * mColNum);
 
     mCursorX += (mCursorX + mCursorY * mColNum + strlen(str.toStdString().c_str())) % mColNum;
@@ -103,8 +101,6 @@ void CharLcmView::writeStr(QString str)
 }
 void CharLcmView::write(const char *data, int len)
 {
-
-    QPoint postion = QPoint(mCursorX, mCursorY);
     memcpy(mLcmChars + mCursorX + mCursorY * mColNum, data, len + mCursorX + mCursorY * mColNum <= mRowNum * mColNum ? len : mRowNum * mColNum);
 
     mCursorX += (mCursorX + mCursorY * mColNum + len) % mColNum;
@@ -113,7 +109,6 @@ void CharLcmView::write(const char *data, int len)
 
 void CharLcmView::setCustomFont(int index, QVector<uint8_t> rawdata, int len)
 {
-
     memcpy(mCustomCharsRaw.data() + index * 8, rawdata.data(), len);
     reGenResoures();
     forceReDraw();
@@ -188,6 +183,7 @@ void CharLcmView::getColRow(int col, int row)
 
 void CharLcmView::resizeEvent(QResizeEvent *event)
 {
+    Q_UNUSED(event)
     mSurfaceHeight = height();
     mSurfaceWidth = width();
     reGenResoures();
@@ -196,7 +192,7 @@ void CharLcmView::resizeEvent(QResizeEvent *event)
 
 void CharLcmView::paintEvent(QPaintEvent *event)
 {
-    Q_UNUSED(event);
+    Q_UNUSED(event)
     QPainter painter(this);
 
     //    //设置QPainter的绘图区
@@ -232,6 +228,7 @@ void CharLcmView::paintEvent(QPaintEvent *event)
 
 void CharLcmView::mouseDoubleClickEvent(QMouseEvent *event)
 {
+    Q_UNUSED(event)
     if (!mIsFullScreen)
     {
         this->setWindowFlags(Qt::Window);

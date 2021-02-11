@@ -157,8 +157,8 @@ QPixmap FontGenerator::genSingleCustomFontBitmap(QVector<uint8_t> raw, double un
         for (int x = 0; x < mPixelsPerRow; ++x)
         {
 
-            float pixelRectLeft = (float)(x * (charPixelWidth + mPixelSpaceWeight * mUnitWidth));
-            float pixelRectTop = (float)(y * (charPixelHeight + mPixelSpaceWeight * mUnitHeight));
+            double pixelRectLeft = x * (charPixelWidth + mPixelSpaceWeight * mUnitWidth);
+            double pixelRectTop = y * (charPixelHeight + mPixelSpaceWeight * mUnitHeight);
 
             QRectF pixelRect = QRectF(pixelRectLeft, pixelRectTop,
                                       charPixelWidth, charPixelHeight);
@@ -204,8 +204,8 @@ QPixmap FontGenerator::genSingleFontBitmap(int fontIndex, double unitWidth, doub
         for (int x = 0; x < mPixelsPerRow; ++x)
         {
 
-            float pixelRectLeft = (float)(x * (charPixelWidth + mPixelSpaceWeight * mUnitWidth));
-            float pixelRectTop = (float)(y * (charPixelHeight + mPixelSpaceWeight * mUnitHeight));
+            double pixelRectLeft = x * (charPixelWidth + mPixelSpaceWeight * mUnitWidth);
+            double pixelRectTop = y * (charPixelHeight + mPixelSpaceWeight * mUnitHeight);
 
             QRectF pixelRect = QRectF(pixelRectLeft, pixelRectTop,
                                       charPixelWidth, charPixelHeight);
@@ -272,8 +272,8 @@ QPoint FontGenerator::getColRowSize()
 void FontGenerator::getActualCursor(QPoint cursor, QPointF *actualCursor)
 {
 
-    actualCursor->setX((float)(mMarginWeight * mUnitWidth + mCharWidthOffset * cursor.x()));
-    actualCursor->setY((float)(mMarginWeight * mUnitHeight + mCharHeightOffset * cursor.y()));
+    actualCursor->setX(mMarginWeight * mUnitWidth + mCharWidthOffset * cursor.x());
+    actualCursor->setY(mMarginWeight * mUnitHeight + mCharHeightOffset * cursor.y());
 }
 
 void FontGenerator::getActualCursor(int x, int y, QPointF *actualCursor)
