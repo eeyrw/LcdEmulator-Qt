@@ -35,11 +35,7 @@ void TcpServer::readMessage()
     //QByteArray buf;
     //buf = m_pisocket->readAll();
 
-    while (int q = m_pisocket->bytesAvailable())
-    {
-        //qDebug() << "Available:"<<q;
-        ParseEventFrameStream(m_pisocket);
-    }
+    while (m_pisocket->bytesAvailable() && ParseEventFrameStream(m_pisocket));
     //qDebug() << buf;
 }
 
