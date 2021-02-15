@@ -94,8 +94,7 @@ void MainWindow::on_btnSetPixelColor_clicked()
 
 void MainWindow::on_btnFullScreen_clicked()
 {
-    ui->charLcmView->setWindowFlags (Qt::Window);
-    ui->charLcmView->showFullScreen();
+    ui->charLcmView->switchFullScreen(true);
 }
 
 

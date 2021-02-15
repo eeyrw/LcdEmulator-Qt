@@ -230,15 +230,29 @@ void CharLcmView::mouseDoubleClickEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
     if (!mIsFullScreen)
+        switchFullScreen(true);
+    else
+        switchFullScreen(false);
+}
+
+void CharLcmView::switchFullScreen(bool isFullScreen)
+{
+    if (isFullScreen)
     {
-        this->setWindowFlags(Qt::Window);
-        this->showFullScreen();
-        mIsFullScreen = true;
+        if(!mIsFullScreen)
+        {
+            this->setWindowFlags(Qt::Window);
+            this->showFullScreen();
+            mIsFullScreen = true;
+        }
     }
     else
     {
-        this->setWindowFlags(Qt::SubWindow);
-        this->showNormal();
-        mIsFullScreen = false;
+        if(mIsFullScreen)
+        {
+            this->setWindowFlags(Qt::SubWindow);
+            this->showNormal();
+            mIsFullScreen = false;
+        }
     }
 }

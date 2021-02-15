@@ -62,6 +62,7 @@ public:
     void getColRow(int col, int row);
     void resizeEvent(QResizeEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void switchFullScreen(bool isFullScreen);
 
 signals:
 public slots:
