@@ -171,6 +171,14 @@ void CharLcmView::setColRow(int col, int row)
 {
     mColNum = col;
     mRowNum = row;
+    if(mLcmChars!=nullptr)
+        delete [] mLcmChars;
+    mLcmChars = new char[mRowNum * mColNum];
+    for (int i = 0; i < mRowNum * mColNum; i++)
+    {
+        mLcmChars[i] = ' '; // 空格字符
+    }
+
     reGenResoures();
     forceReDraw();
 }
